@@ -4,7 +4,7 @@ all:
 	$(LD) -m elf_x86_64 -nodefaultlibs -nostdlib -T boot/x86_64/kernel64.ld -o kernel.elf boot/x86_64/entry64.o boot/x86_64/main.o  nimcache/*.o  -b binary boot/x86_64/initcode boot/x86_64/entryother
 
 
-run: all
+run: kernel.elf
 	qemu-system-x86_64  -kernel kernel.elf -vnc :1  -s -serial stdio
 
 clean:

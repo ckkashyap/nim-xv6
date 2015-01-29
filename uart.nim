@@ -4,11 +4,28 @@ const COM1 = 0x3f8
 
 var uart : bool = false
 
+
+proc uartPutC(byte: uint8) = 
+  if not uart:
+    return
+  for i in 0 .. 128:
+    if 0 == (int8(inb(COM1+5)) and 0x20):
+       break
+  outb(COM1, byte)  
+
+proc uartGetC() : int = 
+  if not uart:
+    return -1
+  
+  if 0 == (int8(inb(COM1+5)) and 0x01):
+    return -1
+
+  return int(inb(COM1))
+
+
 proc uartPutStr*(text: string) = 
   for i in 0 .. text.len - 1:
-    var b = uint8(i)
-    outb(COM1, 65)
-  outb(COM1, 10)
+    uartPutC(uint8(text[i]))
 
 proc earlyInit* () =
   outb(COM1+2 , 0)
@@ -29,6 +46,12 @@ proc earlyInit* () =
   uart = true
 
   uartPutStr("xv6...\n")
+
+  var x = uartGetC()
+
+  if x == 65:
+    while true:
+      uartPutStr("Capital A pressed\n")
   
 
   
