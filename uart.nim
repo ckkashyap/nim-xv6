@@ -4,6 +4,12 @@ const COM1 = 0x3f8
 
 var uart : bool = false
 
+proc uartPutStr*(text: string) = 
+  for i in 0 .. text.len - 1:
+    var b = uint8(i)
+    outb(COM1, 65)
+  outb(COM1, 10)
+
 proc earlyInit* () =
   outb(COM1+2 , 0)
 
@@ -22,7 +28,7 @@ proc earlyInit* () =
 
   uart = true
 
-  outb(COM1, 65);
+  uartPutStr("xv6...\n")
   
 
   
