@@ -1,3 +1,5 @@
+import x86asm
+
 proc nimMain()  {.exportc.} =
   while true:
     asm """
