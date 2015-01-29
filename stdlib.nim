@@ -20,15 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import uart
-import kalloc
-import stdlib
-
-proc nimMain()  {.exportc.} =
+proc strlen* (s: cstring) : int {.exportc.} =
+  var count = 0
   while true:
-    earlyInit()
-    kinit1()
-
-
-nimMain()
-
+    if int(s[count]) == 0:
+      break
+    count = count + 1
+  return count

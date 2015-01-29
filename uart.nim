@@ -45,7 +45,7 @@ proc uartGetC() : int =
   return int(inb(COM1))
 
 
-proc uartPutStr*(text: string) = 
+proc uartPutStr*(text: cstring) = 
   for i in 0 .. text.len - 1:
     uartPutC(uint8(text[i]))
 
