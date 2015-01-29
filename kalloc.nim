@@ -20,14 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import uart
-import kalloc
+type Tkmem = object
+  useLock: int
 
-proc nimMain()  {.exportc.} =
-  while true:
-    earlyInit()
-    kinit1()
+var kmem : Tkmem
 
-
-nimMain()
-
+proc kinit1*() =
+  var x = 10
