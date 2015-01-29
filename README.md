@@ -7,6 +7,7 @@ Translate xv6 to nim
 
 Build depends on a C compiler that can emit x86_64
 
+```bash
 export GCC=gcc
 export LD=ld
 export OBJCOPY=objcopy
