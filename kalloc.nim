@@ -22,13 +22,19 @@
 
 import spinlock
 
-type Tkmem = object
-  lock: Tspinlock
+
+# TODO - consider using region pointers
+type
+  KernelSpace = object
+  UserSpace = object
+
+type KMem = object
+  lock: Spinlock
   useLock: int
   #TODO - this structure is incomplete
 
 
-var kmem = Tkmem ()
+var kmem = KMem ()
 
 proc kinit1*() =
   initlock(addr kmem.lock, "kmem")

@@ -20,15 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-type Tspinlock* = object
+type Spinlock* = object
   locked: int
-  name: string
+  name: cstring
   #TODO - this structure is incomplete
 
 
-#let DummyLock = Tspinlock(locked:0, name:"DUMMY")
-
-proc initlock*(lk: ptr Tspinlock, name: string) =
+proc initlock*(lk: ptr Spinlock, name: cstring) =
   lk.locked = 0
   lk.name = name
   #TODO - this structure is incomplete
