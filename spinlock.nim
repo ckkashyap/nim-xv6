@@ -20,15 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import spinlock
-
-type Tkmem = object
-  lock: Tspinlock
-  useLock: int
+type Tspinlock* = object
+  locked: int
+  name: string
   #TODO - this structure is incomplete
 
 
-var kmem = Tkmem ()
+#let DummyLock = Tspinlock(locked:0, name:"DUMMY")
 
-proc kinit1*() =
-  initlock(addr kmem.lock, "kmem")
+proc initlock*(lk: ptr Tspinlock, name: string) =
+  lk.locked = 0
+  lk.name = name
+  #TODO - this structure is incomplete
