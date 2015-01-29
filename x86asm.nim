@@ -20,25 +20,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-proc outb (port : uint16, value: uint8) =
+proc outb* (port: uint16, value: uint8) =
   asm """
-    out %%al, %%dx
-    :
-    : "a"(`value`), "d"(`port)
+    outb %%al, %%dx
+    "":
+    :"a"(`value`), "d"(`port`)
+  """  
+
+proc inb* (port: uint16): uint8 =
+  asm """
+    inb %%dx, %%al
+    :"=a"(`result`)
+    :"d"(`port`)
   """
-
-# pub fn outb (port: u16, value: u8) {
-# 	unsafe {
-# 	asm!("out %al, %dx"::"{al}"(value), "{dx}"(port));
-# 	}
-# }
-# 
-# pub fn inb(port: u16) -> u8 {
-#         let ret : u8;
-# 	unsafe {
-#         asm!("inb %dx, %al" : "={ax}"(ret) : "{dx}"(port));
-# 	}	
-#         return ret;
-# }
-
