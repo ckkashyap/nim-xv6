@@ -32,6 +32,6 @@ proc strlen* (s: cstring) : int {.exportc.} =
 
 
 
-proc memset* (p: ArbitraryPointer, b: int8, n: int) : ArbitraryPointer{.exportc.} =
+proc memsetNIM* (p: ArbitraryPointer, b: int8, n: int) : ArbitraryPointer{.exportc.} =
   for i in 0 .. n-1:
     p[i] = b

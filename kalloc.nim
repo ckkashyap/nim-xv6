@@ -26,6 +26,7 @@ import types
 import consts
 import memlayout
 import console
+import stdlib
 
 
 type KMem = object
@@ -40,7 +41,8 @@ var physicalMemEnd: Address;
 proc kfree(v: Address) = 
   if (v mod PGSIZE != 0) or (v < physicalMemEnd) or (v2p(v) >= PHYSTOP):
     panic("kfree")
-  var x = 10
+  var x = memsetNIM(cast[ArbitraryPointer](v), 1, PGSIZE)
+
 
 proc freeRange(startAddress: Address, endAddress: Address) =
   var sa = PGROUNDUP(startAddress)
