@@ -21,15 +21,12 @@
 # SOFTWARE.
 
 import uart
-import kalloc
-import stdlib
 
-proc nimMain()  {.exportc.} =
+proc panic*(s: cstring) = 
+# TODO need to call cli
+  uartPutStr(s)
   while true:
-    earlyInit()
-    kinit1(0, 0)
-    
-
-
-nimMain()
-
+    asm """
+      nop
+    """
+  

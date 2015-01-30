@@ -20,16 +20,37 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import uart
-import kalloc
-import stdlib
+import types
 
-proc nimMain()  {.exportc.} =
-  while true:
-    earlyInit()
-    kinit1(0, 0)
-    
+const EXTMEM*   = 0x0fffff            # Start of extended memory
+const PHYSTOP*  = 0xE000000           # Top physical memory
+const DEVSPACE* = 0xFE000000          # Other devices are at high addresses
+
+# Key addresses for address space layout (see kmap in vm.c for layout)
+
+const KERNBASE* = 0xFFFFFFFF80000000  # First kernel virtual address
+const DEVBASE*  = 0xFFFFFFFF40000000  # First device virtual address
+const KERNLINK* = (KERNBASE + EXTMEM) # Address where kernel is linked
+
+proc v2p*(a: Address): Address =
+  a - KERNBASE
+
+proc p2v*(a: Address): Address =
+  a + KERNBASE
+
+proc V2P*(a: Address): Address =
+  a - KERNBASE
+
+proc P2V*(a: Address): Address =
+  a + KERNBASE
+
+proc IO2V*(a: Address): Address =
+  a + DEVBASE - DEVSPACE
 
 
-nimMain()
+proc V2P_WO*(a: Address): Address =
+  a - KERNBASE
+
+proc P2V_WO*(a: Address): Address =
+  a + KERNBASE
 

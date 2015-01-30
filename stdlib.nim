@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import types
+
 proc strlen* (s: cstring) : int {.exportc.} =
   var count = 0
   while true:
@@ -27,3 +29,9 @@ proc strlen* (s: cstring) : int {.exportc.} =
       break
     count = count + 1
   return count
+
+
+
+proc memset* (p: ArbitraryPointer, b: int8, n: int) : ArbitraryPointer{.exportc.} =
+  for i in 0 .. n-1:
+    p[i] = b

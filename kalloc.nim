@@ -24,6 +24,9 @@ import spinlock
 import mmu
 import types
 import consts
+import memlayout
+import console
+
 
 type KMem = object
   lock: Spinlock
@@ -32,8 +35,11 @@ type KMem = object
 
 
 var kmem = KMem ()
+var physicalMemEnd: Address;
 
-proc kfree(a: Address) = 
+proc kfree(v: Address) = 
+  if (v mod PGSIZE != 0) or (v < physicalMemEnd) or (v2p(v) >= PHYSTOP):
+    panic("kfree")
   var x = 10
 
 proc freeRange(startAddress: Address, endAddress: Address) =
@@ -46,6 +52,7 @@ proc freeRange(startAddress: Address, endAddress: Address) =
 
 
 proc kinit1*(startAddress: Address, endAddress: Address) =
+  physicalMemEnd = endAddress
   initlock(addr kmem.lock, "kmem")
   kmem.useLock = false
   freeRange(startAddress, endAddress)

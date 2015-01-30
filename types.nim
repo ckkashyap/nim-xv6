@@ -24,7 +24,7 @@
 type Address* = int64
 
 # TODO an arbitrary pointer type with 1G size ... till I find something better
-type ArbitraryPointer* = ptr array[1024*1024*1024, uint8]
+type ArbitraryPointer* = ptr array[1024*1024*1024, int8]
 
 
 # TODO - consider using region pointers

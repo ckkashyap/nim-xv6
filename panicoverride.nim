@@ -1,11 +1,16 @@
 {.push stack_trace: off, profiler:off.}
 
-proc rawoutput(s: string) =
-  asm """
-    "nop"
-  """
+import uart
 
-proc panic(s: string) =
+proc rawoutput(s: cstring) =
+  uartPutStr(s)
+  while true:
+    asm """
+      nop
+    """
+
+
+proc panic(s: cstring) =
   rawoutput(s)
 
 # Alternatively we also could implement these 2 here:
