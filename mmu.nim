@@ -20,43 +20,59 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Task state segment format
-type TaskState = object
-  uint link;         # Old ts selector
-  uint esp0;         # Stack pointers and segment selectors
-  ushort ss0;        #   after an increase in privilege level
-  ushort padding1;
-  uint *esp1;
-  ushort ss1;
-  ushort padding2;
-  uint *esp2;
-  ushort ss2;
-  ushort padding3;
-  void *cr3;         # Page directory base
-  uint *eip;         # Saved state from last task switch
-  uint eflags;
-  uint eax;          # More saved state (registers)
-  uint ecx;
-  uint edx;
-  uint ebx;
-  uint *esp;
-  uint *ebp;
-  uint esi;
-  uint edi;
-  ushort es;         # Even more saved state (segment selectors)
-  ushort padding4;
-  ushort cs;
-  ushort padding5;
-  ushort ss;
-  ushort padding6;
-  ushort ds;
-  ushort padding7;
-  ushort fs;
-  ushort padding8;
-  ushort gs;
-  ushort padding9;
-  ushort ldt;
-  ushort padding10;
-  ushort t;          # Trap on task switch
-  ushort iomb;       # I/O map base address
-};
+
+# // Segment Descriptor
+# struct SegDesc {
+# uint lim_15_0 : 16;  // Low bits of segment limit
+# uint base_15_0 : 16; // Low bits of segment base address
+# uint base_23_16 : 8; // Middle bits of segment base address
+# uint type : 4;       // Segment type (see STS_ constants)
+# uint s : 1;          // 0 = system, 1 = application
+# uint dpl : 2;        // Descriptor Privilege Level
+# uint p : 1;          // Present
+# uint lim_19_16 : 4;  // High bits of segment limit
+# uint avl : 1;        // Unused (available for software use)
+# uint rsv1 : 1;       // Reserved
+# uint db : 1;         // 0 = 16-bit segment, 1 = 32-bit segment
+# uint g : 1;          // Granularity: limit scaled by 4K when set
+# uint base_31_24 : 8; // High bits of segment base address
+# };
+
+
+type
+  SegDesc* = uint64
+
+type
+  SegDescPointer* = ptr array [8, uint8]
+
+proc segmentBase(descPointer: SegDescPointer): uint32 = 
+  let base_31_24 = descPointer[7]
+  let base_23_16 = descPointer[4]
+  let base_15_08 = descPointer[2]
+  let base_07_00 = descPointer[3]
+  (base_31_24 shl 24) or (base_23_16 shl 16) or (base_15_08 shl 8) or base_07_00
+
+
+proc `segmentBase=`(descPointer: SegDescPointer, val: uint32) =
+  descPointer[7] = 0xff and (val shr 24)
+  descPointer[4] = 0xff and (val shr 16)
+  descPointer[2] = 0xff and (val shr 8)
+  descPointer[3] = 0xff and val
+
+
+proc segmentLimit(descPointer: SegDescPointer): uint32 = 
+  let limit_19_16 = (descPointer[6] shr 4) and 0xf
+  let limit_15_08 = descPointer[0]
+  let limit_07_00 = descPointer[1]
+  (limit_19_16 shl 12) or (limit_15_08 shl 8) or limit_07_00
+
+proc `segmentLimit=`(descPointer: SegDescPointer, val:uint32) = 
+  descPointer[6] = 0xf and (val shr 12)
+  descPointer[0] = 0xff and (val shr 8)
+  descPointer[1] = 0xff and val
+
+
+  
+
+
+
