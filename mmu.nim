@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 import types
+import consts
 
 # // Segment Descriptor
 # struct SegDesc {
@@ -72,7 +73,6 @@ proc `segmentLimit=`(descPointer: SegDescPointer, val:int32) =
 
 
 
-#define PGROUNDUP(sz)  (((sz)+((uintp)PGSIZE-1)) & ~((uintp)(PGSIZE-1)))
+proc PGROUNDUP*(a: Address): Address =
+  (a + PGSIZE - 1) and (not (PGSIZE - 1))
 
-proc PGROUNDUP*(a: Address): Address = 
-  return 0

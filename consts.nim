@@ -20,35 +20,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import spinlock
-import mmu
-import types
-import consts
 
-type KMem = object
-  lock: Spinlock
-  useLock: bool
-  #TODO - this structure is incomplete
-
-
-var kmem = KMem ()
-
-proc kfree(a: Address) = 
-  var x = 10
-
-proc freeRange(startAddress: Address, endAddress: Address) =
-  var sa = PGROUNDUP(startAddress)
-  while true:
-    kfree(sa)
-    sa = sa + PGSIZE
-    if sa > endAddress:
-      break
-
-
-proc kinit1*(startAddress: Address, endAddress: Address) =
-  initlock(addr kmem.lock, "kmem")
-  kmem.useLock = false
-  freeRange(startAddress, endAddress)
-
-
-
+const PGSIZE* = 4096
