@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import types
 
 # // Segment Descriptor
 # struct SegDesc {
@@ -43,36 +44,35 @@ type
   SegDesc* = uint64
 
 type
-  SegDescPointer* = ptr array [8, uint8]
+  SegDescPointer* = ptr array [8, int8]
 
-proc segmentBase(descPointer: SegDescPointer): uint32 = 
+proc segmentBase(descPointer: SegDescPointer): int32 = 
   let base_31_24 = descPointer[7]
   let base_23_16 = descPointer[4]
   let base_15_08 = descPointer[2]
   let base_07_00 = descPointer[3]
   (base_31_24 shl 24) or (base_23_16 shl 16) or (base_15_08 shl 8) or base_07_00
 
+proc `segmentBase=`(descPointer: SegDescPointer, val: int32) =
+  descPointer[7] = cast[int8](0xff and (val shr 24))
+  descPointer[4] = cast[int8](0xff and (val shr 16))
+  descPointer[2] = cast[int8](0xff and (val shr 8))
+  descPointer[3] = cast[int8](0xff and val)
 
-proc `segmentBase=`(descPointer: SegDescPointer, val: uint32) =
-  descPointer[7] = 0xff and (val shr 24)
-  descPointer[4] = 0xff and (val shr 16)
-  descPointer[2] = 0xff and (val shr 8)
-  descPointer[3] = 0xff and val
-
-
-proc segmentLimit(descPointer: SegDescPointer): uint32 = 
-  let limit_19_16 = (descPointer[6] shr 4) and 0xf
-  let limit_15_08 = descPointer[0]
-  let limit_07_00 = descPointer[1]
+proc segmentLimit(descPointer: SegDescPointer): int32 = 
+  let limit_19_16 = cast[int8]((descPointer[6] shr 4) and 0xf)
+  let limit_15_08 = cast[int8](descPointer[0])
+  let limit_07_00 = cast[int8](descPointer[1])
   (limit_19_16 shl 12) or (limit_15_08 shl 8) or limit_07_00
 
-proc `segmentLimit=`(descPointer: SegDescPointer, val:uint32) = 
-  descPointer[6] = 0xf and (val shr 12)
-  descPointer[0] = 0xff and (val shr 8)
-  descPointer[1] = 0xff and val
-
-
-  
+proc `segmentLimit=`(descPointer: SegDescPointer, val:int32) = 
+  descPointer[6] = cast[int8](0xf and (val shr 12))
+  descPointer[0] = cast[int8](0xff and (val shr 8))
+  descPointer[1] = cast[int8](0xff and val)
 
 
 
+#define PGROUNDUP(sz)  (((sz)+((uintp)PGSIZE-1)) & ~((uintp)(PGSIZE-1)))
+
+proc PGROUNDUP*(a: Address): Address = 
+  return 0

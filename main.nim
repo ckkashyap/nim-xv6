@@ -27,7 +27,7 @@ import stdlib
 proc nimMain()  {.exportc.} =
   while true:
     earlyInit()
-    kinit1()
+    kinit1(0, 0)
 
 
 nimMain()

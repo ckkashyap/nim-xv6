@@ -20,29 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import spinlock
-import mmu
-import types
 
-type KMem = object
-  lock: Spinlock
-  useLock: bool
-  #TODO - this structure is incomplete
+type Address* = int64
+
+# TODO an arbitrary pointer type with 1G size ... till I find something better
+type ArbitraryPointer* = ptr array[1024*1024*1024, uint8]
 
 
-var kmem = KMem ()
-
-proc freeRange(startAddress: Address, endAddress: Address) =
-  var ap: Arbitrarypointer = cast[Arbitrarypointer](startAddress)
-  asm """
-    nop
-  """
-
-
-proc kinit1*(startAddress: Address, endAddress: Address) =
-  initlock(addr kmem.lock, "kmem")
-  kmem.useLock = false
-  freeRange(startAddress, endAddress)
-
-
+# TODO - consider using region pointers
+type
+  KernelSpace = object
+  UserSpace = object
 
