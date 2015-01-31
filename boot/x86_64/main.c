@@ -15,7 +15,7 @@ extern char end[]; // first address after kernel loaded from ELF file
 // Allocate a real stack and switch to it, first
 // doing some setup required for memory allocator to work.
 
-void nimMain();
+void nimMain(void *);
 int
 main(void)
 {
@@ -34,7 +34,7 @@ main(void)
 	  }
 	  ci++;
 	  if(ci==3)ci=0;
-	  nimMain();
+	  nimMain(end);
   }
 }
 

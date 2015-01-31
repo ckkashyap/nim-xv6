@@ -24,12 +24,15 @@ import uart
 import kalloc
 import stdlib
 import types
+import memlayout
 
-proc nimMain()  {.exportc.} =
+
+
+proc nimMain(endAddress: Address)  {.exportc.} =
   while true:
     earlyInit()
-    kinit1(0, 0)
+    kinit1(endAddress, P2V(4*1024*1024))
     
 
 
-nimMain()
+nimMain(0)

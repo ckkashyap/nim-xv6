@@ -27,13 +27,13 @@ const COM1 = 0x3f8
 var uart : bool = false
 
 
-proc uartPutC(byte: uint8) = 
+proc uartPutC(byte: int8) = 
   if not uart:
     return
   for i in 0 .. 128:
     if 0 == (int8(inb(COM1+5)) and 0x20):
        break
-  outb(COM1, byte)  
+  outb(COM1, uint8(byte))  
 
 proc uartGetC() : int = 
   if not uart:
@@ -45,9 +45,38 @@ proc uartGetC() : int =
   return int(inb(COM1))
 
 
+proc uartPutHexDigit(h: int8) =
+  var hexString: cstring  = "0123456789ABCDEF"
+  uartPutC(int8(hexString[h]))
+  
+proc uartPutInt8*(b: int8) =
+  let n1 = (b and 0xf0) shr 4
+  let n2 = b and 0xf
+  uartPutHexDigit(int8(n1))
+  uartPutHexDigit(int8(n2))
+
+proc uartPutInt16*(w: int16) =
+  var ww = w
+  var p = cast[ptr array[2, int8]]( addr ww )
+  for i in 0 .. 1:
+    uartPutInt8(p[1-i])
+
+proc uartPutInt32*(dw: int32) =
+  var dwdw = dw
+  var p = cast[ptr array[4, int8]]( addr dwdw )
+  for i in 0 .. 3:
+    uartPutInt8(p[3-i])
+
+proc uartPutInt64*(qw: int64) =
+  var qwqw = qw
+  var p = cast[ptr array[8, int8]]( addr qwqw )
+  for i in 0 .. 7:
+    uartPutInt8(p[7-i])
+    
+
 proc uartPutStr*(text: cstring) = 
   for i in 0 .. text.len - 1:
-    uartPutC(uint8(text[i]))
+    uartPutC(int8(text[i]))
 
 proc earlyInit* () =
   outb(COM1+2 , 0)
