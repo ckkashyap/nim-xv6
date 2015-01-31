@@ -33,5 +33,3 @@ proc nimMain()  {.exportc.} =
 
 
 nimMain()
-var x = strlen("")
-var y = memset(cast[ArbitraryPointer](0), 0, 0)
