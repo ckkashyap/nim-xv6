@@ -1,6 +1,6 @@
 all:
 	make -C boot/x86_64
-	nim c --noLinking --os:standalone --deadCodeElim:on --noMain  --parallelBuild:1 --gcc.exe:$(GCC) --passC:"-w" --passC:"-O2" --passC:"-Wall" --passC:"-Wextra" --passC:"-ffreestanding" --passC:"-mcmodel=kernel"   main.nim
+	nim c --noLinking --os:standalone --deadCodeElim:on --noMain  --parallelBuild:1 --gcc.exe:$(GCC) --passC:"-I$(NIM)/tinyc/win32/include" --passC:"-w" --passC:"-O2" --passC:"-Wall" --passC:"-Wextra" --passC:"-ffreestanding" --passC:"-mcmodel=kernel"   main.nim
 	$(LD) -m elf_x86_64 -nodefaultlibs -nostdlib -T boot/x86_64/kernel64.ld -o kernel.elf boot/x86_64/entry64.o boot/x86_64/main.o  nimcache/*.o  -b binary boot/x86_64/initcode boot/x86_64/entryother
 
 

@@ -23,6 +23,7 @@
 import uart
 import kalloc
 import stdlib
+import types
 
 proc nimMain()  {.exportc.} =
   while true:
@@ -32,4 +33,5 @@ proc nimMain()  {.exportc.} =
 
 
 nimMain()
-
+var x = strlen("")
+var y = memset(cast[ArbitraryPointer](0), 0, 0)
