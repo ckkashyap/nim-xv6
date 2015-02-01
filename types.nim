@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 
-type Address* = int64
+type Address* = uint64
 
 # TODO an arbitrary pointer type with 1G size ... till I find something better
 type ArbitraryPointer* = ptr array[1024*1024*1024, int8]

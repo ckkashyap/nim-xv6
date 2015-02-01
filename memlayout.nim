@@ -21,16 +21,17 @@
 # SOFTWARE.
 
 import types
+import unsigned
 
-const EXTMEM*   = 0x0fffff            # Start of extended memory
-const PHYSTOP*  = 0xE000000           # Top physical memory
-const DEVSPACE* = 0xFE000000          # Other devices are at high addresses
+const EXTMEM*   = Address(0x0fffff)            # Start of extended memory
+const PHYSTOP*  = Address(0xE000000)           # Top physical memory
+const DEVSPACE* = Address(0xFE000000)          # Other devices are at high addresses
 
 # Key addresses for address space layout (see kmap in vm.c for layout)
 
-const KERNBASE* = 0xFFFFFFFF80000000  # First kernel virtual address
-const DEVBASE*  = 0xFFFFFFFF40000000  # First device virtual address
-const KERNLINK* = (KERNBASE + EXTMEM) # Address where kernel is linked
+const KERNBASE* = Address(0xFFFFFFFF80000000)  # First kernel virtual address
+const DEVBASE*  = Address(0xFFFFFFFF40000000)  # First device virtual address
+const KERNLINK* = Address(KERNBASE + EXTMEM) # Address where kernel is linked
 
 proc v2p*(a: Address): Address =
   a - KERNBASE

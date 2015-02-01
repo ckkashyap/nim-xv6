@@ -28,6 +28,7 @@ import memlayout
 import console
 import stdlib
 import uart
+import unsigned
 
 type KMem = object
   lock: Spinlock
@@ -39,7 +40,7 @@ var kmem = KMem ()
 var physicalMemEnd: Address;
 
 proc kfree(v: Address) =
-  if (v mod PGSIZE != 0) or (v < physicalMemEnd) or (v2p(v) >= PHYSTOP):
+  if ((int64(v) mod int64(PGSIZE)) != 0) or (v < physicalMemEnd) or (v2p(v) >= PHYSTOP):
     panic("kfree")
   var x = memsetNIM(cast[ArbitraryPointer](v), 1, PGSIZE)
 
