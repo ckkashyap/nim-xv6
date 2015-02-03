@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import x86asm
+
 type Spinlock* = object
   locked: int
   name: cstring
@@ -30,3 +32,10 @@ proc initlock*(lk: ptr Spinlock, name: cstring) =
   lk.locked = 0
   lk.name = name
   #TODO - this structure is incomplete
+
+proc pushcli*() =
+  cli()
+  
+
+proc acquire*(lk: ptr Spinlock) = 
+  var x = 0

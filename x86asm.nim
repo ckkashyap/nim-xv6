@@ -23,7 +23,7 @@
 proc outb* (port: uint16, value: uint8) =
   asm """
     outb %%al, %%dx
-    "":
+    :
     :"a"(`value`), "d"(`port`)
   """  
 
@@ -33,3 +33,18 @@ proc inb* (port: uint16): uint8 =
     :"=a"(`result`)
     :"d"(`port`)
   """
+
+
+proc readeflags*(): uint64 = 
+  asm """
+    pushf
+    pop %0
+   :"=r"(`result`)
+   :
+   """
+proc cli*() =
+  asm """
+    cli
+  """
+
+discard readeflags()
