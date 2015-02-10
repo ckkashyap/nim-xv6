@@ -44,6 +44,9 @@ proc kfree(v: Address) =
     panic("kfree")
   var x = memsetNIM(cast[ArbitraryPointer](v), 1, PGSIZE)
 
+  ## TODO not complete
+  acquire(addr kmem.lock)
+
 
 proc freeRange(startAddress: Address, endAddress: Address) =
   var sa = PGROUNDUP(startAddress)

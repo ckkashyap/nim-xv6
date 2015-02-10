@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 import x86asm
+import vm64
 
 type Spinlock* = object
   locked: int
@@ -34,8 +35,13 @@ proc initlock*(lk: ptr Spinlock, name: cstring) =
   #TODO - this structure is incomplete
 
 proc pushcli*() =
+  var eflags = readeflags()
   cli()
+
+  #TODO - add the if check also
+  cpu.intena = 0
   
 
 proc acquire*(lk: ptr Spinlock) = 
+  pushcli()
   var x = 0

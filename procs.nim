@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import mum
+#import vm64
 
 const NSEGS = 7
 
@@ -34,13 +34,13 @@ type Context = object
   ebp: int64 #rbp
   eip: int64 #rip
 
-type CPU = object
+type CPU* = object
   id: uint8                  # index into cpus[] below
   apicid: uint8              # Local APIC ID
   scheduler: ptr Context     # swtch() here to enter scheduler
-  gdt: array[NSEGS, SegDesc] # x86 global descriptor table
+#  gdt: array[NSEGS, SegDesc] # x86 global descriptor table
   # TODO struct taskstate ts;         # Used by x86 to find stack for interrupt
   started: bool              # Has the CPU started?
   ncli: int                  # Depth of pushcli nesting.
-  intena: int                # Were interrupts enabled before pushcli?                
+  intena*: int                # Were interrupts enabled before pushcli?                
   # TODO local needs to be figured out
