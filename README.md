@@ -3,9 +3,7 @@ Translate xv6 to nim
 
 
 ## Build
-
-
-Build depends on a C compiler that can emit x86_64
+Build depends on a devel version of Nim (0.10.3) and a C compiler that can emit x86_64
 
 ```bash
 export GCC=gcc
